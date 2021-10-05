@@ -1,0 +1,314 @@
+set PREVIEW_MODE "V:/photo/black.png"
+
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+# This File is From Theopse Organization (Self@theopse.org)
+# Licensed under GNU-3-Lisense
+# File: autorun.gm9(LittleFiveToolbox/data/autorun.gm9)
+# Content: Scripts
+# Copyright (c) 2021 Theopse Organization All rights reserved
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+#####################For OPEN####################
+if findnot 0:/gm9/toolbox NULL
+    set PREVIEW_MODE "Resource Package not found!\n\nPlease check if there is a file resource of ToolBox!"
+    echo "Resource Package not found!\n\nPlease check if there is a file resource of ToolBox!"
+    poweroff
+end
+
+#####################Main Menu####################
+@Start
+set PREVIEW_MODE "V:/photo/menu.png"
+
+labelsel -s "Toolbox Menu: " MainMenu_*
+goto Start
+
+#######################Remove Luma3DS From CTRNAND######################
+
+@MainMenu_Remove_Luma3DS_From_CTRNAND
+set PREVIEW_MODE "V:/photo/rmluma.png"
+
+if	not ask "This will remove Luma3DS from your CTRNAND.\n\nContinue?"
+	goto Start
+end
+if          not allow -a 1:/
+            goto Start
+end
+
+rm -o -s 1:/boot.firm
+set PREVIEW_MODE "V:/photo/su.png"
+echo "Luma3DS successfully removed"
+goto Start
+
+##################Clear Home Cache##################
+
+@MainMenu_Clear_Home_Cache
+set PREVIEW_MODE "V:/photo/rmhmca.png"
+if not allow -a A:/
+set PREVIEW_MODE "V:/photo/de.png"
+echo "Home cache remove failed"
+goto Start
+end
+
+if ask "Will clear Home menu cache.\n\ncontinue?"
+rm -o -s A:/extdata/00000000/00000082/00000000/00000005
+rm -o -s A:/extdata/00000000/0000008f/00000000/00000005
+rm -o -s A:/extdata/00000000/00000098/00000000/00000005
+rm -o -s A:/extdata/00000000/000000A1/00000000/00000005
+rm -o -s A:/extdata/00000000/000000A9/00000000/00000005
+rm -o -s A:/extdata/00000000/000000B1/00000000/00000005
+set PREVIEW_MODE "V:/photo/su.png"
+echo "Home cache successfully removed"
+end
+
+goto Start
+
+##################Backup Options##################
+
+@MainMenu_Backup_Options
+set PREVIEW_MODE "V:/photo/backup.png"
+
+labelsel -o -s "Backup Menu: " Backup_Options_*
+goto Start
+
+##################SysNAND Backup##################
+
+@Backup_Options_SysNAND_Backup
+set PREVIEW_MODE "V:/photo/backupready.png"
+
+if	not ask "Create a SysNAND backup in $[GM9OUT]?\n \nPlease make sure you have\nenough storage space"
+	goto MainMenu_Backup_Options
+end
+
+findnot $[GM9OUT]/$[DATESTAMP]_$[SERIAL]_sysnand_??.bin OUTPATH
+
+if	cp -h S:/nand_minsize.bin $[OUTPATH]
+set PREVIEW_MODE "V:/photo/su.png"
+	echo "Backup created successfully:\n$[OUTPATH]"
+else
+set PREVIEW_MODE "V:/photo/de.png"
+	echo "Backup failed"
+end
+goto MainMenu_Backup_Options
+
+##################EmuNAND Backup##################
+
+@Backup_Options_EmuNAND_Backup
+set PREVIEW_MODE "V:/photo/backupready.png"
+
+if	not ask "Create a EmuNAND backup in $[GM9OUT]?\n \nPlease make sure you have\nenough storage space"
+	goto MainMenu_Backup_Options
+end
+
+findnot $[GM9OUT]/$[DATESTAMP]_$[SERIAL]_emunand_??.bin OUTPATH
+
+if	cp -h E:/nand_minsize.bin $[OUTPATH]
+set PREVIEW_MODE "V:/photo/su.png"
+	echo "Backup created successfully:\n$[OUTPATH]"
+else
+set PREVIEW_MODE "V:/photo/de.png"
+	echo "Backup failed"
+end
+goto MainMenu_Backup_Options
+
+
+####################Remove NNID###################
+
+@MainMenu_Remove_NNID
+set PREVIEW_MODE "Remove NNID"
+set PREVIEW_MODE "V:/photo/rmnnid.png"
+if	not ask "This will remove the NNID from your device.\n\nContinue?"
+	goto Start
+end
+if	not allow -a 1:/
+	goto Start
+end
+
+mv -w -n 1:/data/$[SYSID0]/sysdata/00010038/00000000 1:/data/$[SYSID0]/sysdata/00010038/10000000
+
+set PREVIEW_MODE "V:/photo/su.png"
+echo "NNID Successfully Removed"
+goto Start
+
+#######################Remove Face Raiders's SAVE######################
+
+@MainMenu_Remove_Face_Raiders's_SAVE
+set PREVIEW_MODE "V:/photo/rmfrsa.png"
+if not ask       "Will delete your archive.\n\nContinue?"
+goto Start
+end
+
+if not allow -a 1:/
+set PREVIEW_MODE "V:/photo/de.png"
+echo "Remove Failed"
+goto Start
+end
+
+rm -o -s 1:/data/$[SYSID0]/sysdata/0002020d/00000000
+rm -o -s 1:/data/$[SYSID0]/sysdata/0002021d/00000000
+rm -o -s 1:/data/$[SYSID0]/sysdata/0002022d/00000000
+set PREVIEW_MODE "V:/photo/su.png"
+echo "SAVE Successfully Removed"
+goto Start
+
+##############.3ds to .cia Converter##############
+
+@MainMenu_.3ds_to_.cia_Converter
+set PREVIEW_MODE "V:/photo/Converter.png"
+
+
+if not find 0:/gm9/in NULL
+	mkdir 0:/gm9/in
+end
+
+if	not filesel "Select the .3ds file to convert." $[GM9IN]/*.3ds 3DSCIA
+set PREVIEW_MODE "V:/photo/su.png"
+	echo "Cancelled"
+	goto Start
+end
+
+if	not ask "Convert\n \n$[3DSCIA]\n \nto .cia?\n \nPlease make sure you have\nenough storage space."
+set PREVIEW_MODE "V:/photo/su.png"
+                echo "User Aborted"
+	goto Start
+end
+
+if	buildcia $[3DSCIA]
+set PREVIEW_MODE "V:/photo/su.png"
+	echo "$[3DSCIA]\nconverted to .cia successfully in $[GM9OUT]"
+else
+set PREVIEW_MODE "V:/photo/de.png"
+	echo "Operation failed"
+
+end
+goto Start
+
+
+#######################Change Luma3DS######################
+
+@MainMenu_Change_Luma3DS
+set PREVIEW_MODE "V:/photo/changeluma.png"
+
+labelsel -o -s "Luma3DS List: " Change_Luma3DS_*
+goto Start
+
+##################Luma3DS 10.2.1##################
+
+@Change_Luma3DS_Luma3DS_V10.2.1
+set PREVIEW_MODE "Change to Luma3DS 10.2.1"
+
+allow -a 0:/
+
+if ask "Will change to Luma3DS V10.2.1 "
+	cp -w 0:/gm9/toolbox/Luma3DSV10.2.1/boot.firm 0:/boot.firm
+                cp -w 0:/gm9/toolbox/config.bin 0:/luma/config.bin
+set PREVIEW_MODE "V:/photo/su.png"
+	echo "Changed successfully:\nLuma3DS_10.2.1"
+                goto MainMenu_Change_Luma3DS
+else
+set PREVIEW_MODE "V:/photo/de.png"
+echo "Changed failed"
+goto MainMenu_Change_Luma3DS
+end
+
+##################Luma3DS 7.1##################
+
+@Change_Luma3DS_Luma3DS_V7.1
+set PREVIEW_MODE "Change to Luma3DS 7.1"
+
+allow -a 0:/
+
+if ask        "Will change to Luma3DS V7.1"
+	cp -w 0:/gm9/toolbox/Luma3DSV7.1/boot.firm 0:/boot.firm
+                cp -w 0:/gm9/toolbox/config.bin 0:/luma/config.bin
+set PREVIEW_MODE "V:/photo/su.png"
+echo "Changed successfully:\nLuma3DS_V7.1"
+                goto MainMenu_Change_Luma3DS
+else
+set PREVIEW_MODE "V:/photo/de.png"
+echo "Changed failed"
+goto MainMenu_Change_Luma3DS
+end
+
+
+##################Luma3DS 3GX##################
+
+@Change_Luma3DS_Luma3DS_3GX
+set PREVIEW_MODE "Change to Luma3DS 3GX"
+
+allow -a 0:/
+
+if ask        "Will change to Luma3DS 3GX"
+	cp -w 0:/gm9/toolbox/Luma3DS3GX/boot.firm 0:/boot.firm
+                cp -w 0:/gm9/toolbox/Luma3DS3GX/config.bin 0:/luma/config.bin
+set PREVIEW_MODE "V:/photo/su.png"
+echo "Changed successfully:\nLuma3DS_3GX"
+                goto MainMenu_Change_Luma3DS
+else
+set PREVIEW_MODE "V:/photo/de.png"
+echo "Changed failed"
+goto MainMenu_Change_Luma3DS
+end
+
+
+#######################Automatic configuration Luma3DS######################
+
+@Change_Luma3DS_Automatic_configuration_Luma3DS
+set PREVIEW_MODE "V:/photo/autoluma.png"
+
+if ask       "Will Automatic configuration Luma3DS"
+	cp -w 0:/gm9/toolbox/config.bin 0:/luma/config.bin
+set PREVIEW_MODE "V:/photo/su.png"
+                echo "Changed successfully"
+goto Start
+else
+set PREVIEW_MODE "V:/photo/de.png"
+                echo "Changed Failed"
+goto Start
+end
+
+
+#######################Install CIAs######################
+
+@MainMenu_Install_CIAs
+set PREVIEW_MODE "V:/photo/installcia.png"
+
+if not allow -a A:/
+set PREVIEW_MODE "V:/photo/de.png"
+echo "Installed Failed"
+goto Start
+end
+
+if not find A:/dbs DBSPATH
+    mkdir A:/dbs
+    cp -w 0:/gm9/toolbox/dbs A:/dbs
+    fixcmac A:/dbs
+end
+
+if ask       "Will install all CIAs"
+for 0:/cias *.cia
+    install $[FORPATH]
+next
+set PREVIEW_MODE "V:/photo/su.png"
+echo "All installed"
+goto Start
+else
+set PREVIEW_MODE "V:/photo/de.png"
+echo "Installed Failed"
+goto Start
+end
+
+
+#######################Credits&About######################
+@MainMenu_Credits
+set PREVIEW_MODE "V:/photo/about.png"
+
+echo "Version: 1.4B\n\nRelease: 211005\n\nCredits: \n\nLittleFIve\n\nHaneu\n\nCounta\n\nRintim"
+goto Start
+
+#######################Power######################
+
+@MainMenu_Reboot
+           reboot
+
+@MainMenu_Power_Off
+           poweroff
