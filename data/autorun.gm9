@@ -150,38 +150,6 @@ set PREVIEW_MODE "V:/photo/su.png"
 echo "SAVE Successfully Removed"
 goto Start
 
-##############.3ds to .cia Converter##############
-
-@MainMenu_.3ds_to_.cia_Converter
-set PREVIEW_MODE "V:/photo/Converter.png"
-
-
-if not find 0:/gm9/in NULL
-	mkdir 0:/gm9/in
-end
-
-if	not filesel "Select the .3ds file to convert." $[GM9IN]/*.3ds 3DSCIA
-set PREVIEW_MODE "V:/photo/su.png"
-	echo "Cancelled"
-	goto Start
-end
-
-if	not ask "Convert\n \n$[3DSCIA]\n \nto .cia?\n \nPlease make sure you have\nenough storage space."
-set PREVIEW_MODE "V:/photo/su.png"
-                echo "User Aborted"
-	goto Start
-end
-
-if	buildcia $[3DSCIA]
-set PREVIEW_MODE "V:/photo/su.png"
-	echo "$[3DSCIA]\nconverted to .cia successfully in $[GM9OUT]"
-else
-set PREVIEW_MODE "V:/photo/de.png"
-	echo "Operation failed"
-
-end
-goto Start
-
 
 #######################Change Luma3DS######################
 
@@ -292,7 +260,7 @@ set PREVIEW_MODE "V:/photo/su.png"
 echo "All installed"
 goto Start
 else
-set PREVIEW_MODE "V:/photo/de.png"
+set PREVIEW_MODE "V:/photo/installde.png"
 echo "Installed Failed"
 goto Start
 end
@@ -302,7 +270,7 @@ end
 @MainMenu_Credits
 set PREVIEW_MODE "V:/photo/about.png"
 
-echo "Version: 1.4B\n\nRelease: 211005\n\nCredits: \n\nLittleFIve\n\nHaneu\n\nCounta\n\nRintim"
+echo "Version: 1.5B\n\nRelease: 211005\n\nCredits: \n\nLittleFIve\n\nHaneu\n\nCounta\n\nRintim"
 goto Start
 
 #######################Power######################
