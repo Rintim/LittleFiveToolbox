@@ -270,7 +270,7 @@ end
 @MainMenu_Credits
 set PREVIEW_MODE "V:/photo/about.png"
 
-echo "Version: 1.5B\n\nRelease: 211005\n\nCredits: \n\nLittleFIve\n\nHaneu\n\nCounta\n\nRintim"
+echo "Version: 1.5B\n\nRelease: 211107\n\nCredits: \n\nLittleFIve\n\nHaneu\n\nCounta\n\nRintim"
 goto Start
 
 #######################Power######################
