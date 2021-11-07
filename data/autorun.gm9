@@ -260,7 +260,7 @@ set PREVIEW_MODE "V:/photo/su.png"
 echo "All installed"
 goto Start
 else
-set PREVIEW_MODE "V:/photo/installde.png"
+set PREVIEW_MODE "V:/photo/de.png"
 echo "Installed Failed"
 goto Start
 end
